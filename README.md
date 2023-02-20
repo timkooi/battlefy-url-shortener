@@ -1,5 +1,5 @@
 # Battlefy URL Shortener
-This projects hosts the infrastructure and code for a URL shortener that runs on API Gateway, Lambda, and DynamoDb
+This projects hosts the infrastructure and code for a URL shortener that runs on API Gateway, Lambda, and DynamoDB
 
 ## Architecture
 There are 3 main components behinds this project:
@@ -13,17 +13,20 @@ There are 3 main components behinds this project:
 * `.github/workflows/deploy.yaml` is the GitHub Action that deploys our AWS CDK code to an AWS account with specified access keys in the GitHub repository secrets
 
 ## Testing
-Once deployed, the endpoint can be tested for GET and POST requests:
+Once deployed, the endpoint - `https://cipgny3mul.execute-api.us-west-2.amazonaws.com/prod` - can be tested for GET and POST requests:
 
-* `curl -X POST https://cipgny3mul.execute-api.us-west-2.amazonaws.com/prod -H "Content-Type: application/json" -d '{"url": "https://www.facebook.com"}'
+* `curl -X POST https://cipgny3mul.execute-api.us-west-2.amazonaws.com/prod -H "Content-Type: application/json" -d '{"url": "https://www.facebook.com"}'`
 * The response will come back with an id you can use to make the GET request
 * https://cblzfgblqc.execute-api.us-west-2.amazonaws.com/prod/{id} on your browser to validate the redirect mechanism
 
 ### Local testing
 It is possible to do some form of local testing with AWS SAM, but it's a bit challenging to perform integration tests/end-to-end tests that validate the functionality.
 
-You can run `cdk synth --no-staging > template.yml` and `sam local invoke -e test/events/post.json` afterwards to invoke the Lambda against the existing DynamoDB in the AWS account. NOTE: this will not work without credentials to the AWS account.
+You can run `cdk synth --no-staging > template.yml` and `sam local invoke -e test/events/get.json` afterwards to invoke the Lambda against the existing DynamoDB in the AWS account. NOTE: this will not work without credentials to the AWS account.
 
 Some areas of improvement to testing include:
 * spinning up a local DynamoDB with pre-seeded data to validate functionality locally
 * `sam local start-api` to also validate API Gateway functionality in tandem with Lambda
+
+## Further optimizations
+* Authentication can be added to the API Gateway to ensure admins can only access the POST endpoint via the use of API keys or IAM users
